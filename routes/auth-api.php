@@ -17,4 +17,5 @@ Route::get('me', 'UserController@me')->name('me');
 Route::put('auth/password/change', 'UserController@changePassword')->name('api.auth.changePassword');
 Route::apiResource('terms', 'TermController');
 
-Route::apiResource('stories', 'StoryController');
+Route::apiResource('stories', 'StoryController', ['except' => ['index', 'show']]);
+Route::apiResource('posts', 'PostController', ['except' => ['index', 'show']]);

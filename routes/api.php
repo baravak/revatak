@@ -26,3 +26,8 @@ Route::group([
 Route::get('test', function(){
     return ['test' => 10];
 });
+Route::get('stories', 'API\StoryController@index')->name('api.stories.index');
+Route::get('stories/{story}', 'API\StoryController@show')->name('api.stories.show');
+
+Route::get('posts', 'API\PostController@index')->name('api.posts.index');
+Route::get('posts/{post}', 'API\PostController@show')->name('api.posts.show');
