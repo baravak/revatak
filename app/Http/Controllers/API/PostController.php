@@ -75,7 +75,7 @@ class PostController extends Controller
             $model->where('status', $request->status);
         }
         if ($request->primary_term) {
-            $primary_term = Term::findBySerial($request->primary_term)->first();
+            $primary_term = Term::findBySerial($request->primary_term);
             if (!$primary_term) {
                 $this->fail(Term::class, $request->primary_term);
             }

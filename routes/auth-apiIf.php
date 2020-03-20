@@ -8,3 +8,6 @@ Route::group(['prefix' => '$'], function () {
     Route::get('/', 'AssessmentController@index')->name('assessments.index');
     Route::get('{assessment}', 'AssessmentController@show')->name('assessments.show');
 });
+
+Route::get('terms', 'TermController@index')->name('api.terms.index');
+Route::get('terms/{term}', 'TermController@show')->name('api.terms.show');

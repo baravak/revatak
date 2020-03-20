@@ -7,6 +7,8 @@ Route::group([
     Route::post('auth/recovery', 'UserController@recovery')->name('api.auth.recovery');
 
 });
+Route::get('terms/find', 'API\TermController@find')->name('api.terms.find');
+
 Route::group([
     'namespace' => '\App\Http\Controllers\API',
     'as' => 'api.'
