@@ -102,6 +102,7 @@ class PostController extends Controller
             if (!$term) {
                 $this->fail(Term::class, $request->term);
             }
+            $model->select('posts.*');
             $model->join('term_usages', function($q) use ($subTerm){
                 $q->on('term_usages.table_id', 'posts.id')
                 ->where('term_usages.table_name', 'posts')
