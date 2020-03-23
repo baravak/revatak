@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+    public $order_list = ['id' => 'posts.id'];
     public function index(Request $request)
     {
         return $this->_index($request);
@@ -67,6 +68,7 @@ class PostController extends Controller
             'status' => ['draft', 'publish'],
             'primary_term' => '$TERM',
             'term_slug' => null,
+            'term' => '$TERM'
         ];
         $current = [];
         if(in_array($request->status, $allowed['status']))
@@ -90,6 +92,22 @@ class PostController extends Controller
             }
             $model->where('primary_term_id', $term_slug->id);
             $current['term_slug'] = new ResourcesTerm($term_slug);
+        }
+
+        if ($request->term) {
+            $term = Term::findBySerial($request->term);
+            $ids = $term->parents->pluck('id')->toArray();
+            array_push($ids, $term->id);
+            $subTerm = Term::where('parent_map', 'LIKE', join(',', $ids) . '%')->without(['parents', 'creator']);
+            if (!$term) {
+                $this->fail(Term::class, $request->term);
+            }
+            $model->join('term_usages', function($q) use ($subTerm){
+                $q->on('term_usages.table_id', 'posts.id')
+                ->where('term_usages.table_name', 'posts')
+                ->whereIn('term_usages.term_id', $subTerm->pluck('id')->toArray());
+            });
+            $current['term'] = new ResourcesTerm($term);
         }
 
         return [$allowed, $current];
